@@ -1,0 +1,22 @@
+{
+  "name": "workspace",
+  "version": "1.0.0",
+  "description": "A Node.js/TypeScript automation script that uses Tor proxy to access onion sites, interact with elements, and send screenshots to webhooks.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@types/node": "^24.0.15",
+    "axios": "^1.10.0",
+    "dotenv": "^17.2.0",
+    "form-data": "^4.0.4",
+    "puppeteer": "^24.14.0",
+    "sharp": "^0.34.3",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.3"
+  }
+}

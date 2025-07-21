@@ -1,0 +1,49 @@
+modules = ["nodejs-20"]
+
+[nix]
+channel = "stable-24_05"
+packages = ["glib", "nss", "mesa", "gtk3", "tor", "libxkbcommon", "alsa-lib"]
+
+[workflows]
+runButton = "Project"
+
+[[workflows.workflow]]
+name = "Project"
+mode = "parallel"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "Install Dependencies"
+
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "tor_automation_test"
+
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "Tor Service"
+
+[[workflows.workflow]]
+name = "Install Dependencies"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "npm install puppeteer sharp axios form-data dotenv @types/node typescript ts-node"
+
+[[workflows.workflow]]
+name = "tor_automation_test"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "npm install puppeteer sharp axios form-data dotenv @types/node typescript ts-node && npx ts-node src/main.ts"
+
+[[workflows.workflow]]
+name = "Tor Service"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "tor --RunAsDaemon 0 --SocksPort 9050"
