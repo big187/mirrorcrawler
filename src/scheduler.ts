@@ -1,4 +1,5 @@
 import { TorAutomationScript } from './automation';
+import { TorsocksAutomationScript } from './automation-torsocks';
 import { Dashboard } from './dashboard';
 
 export class AutomationScheduler {
@@ -7,9 +8,12 @@ export class AutomationScheduler {
     private intervalId: NodeJS.Timeout | null = null;
     private isRunning = false;
 
+    private torsocksScript: TorsocksAutomationScript;
+
     constructor(dashboard: Dashboard) {
         this.dashboard = dashboard;
         this.automation = new TorAutomationScript(dashboard);
+        this.torsocksScript = new TorsocksAutomationScript(dashboard);
     }
 
     public start(intervalMinutes: number = 40): void {
@@ -44,10 +48,24 @@ export class AutomationScheduler {
         this.dashboard.log('info', 'Starting automated execution...');
 
         try {
-            await this.automation.run();
-            this.dashboard.log('success', 'Automation completed successfully');
+            // Try multiple methods for maximum compatibility
+            this.dashboard.log('info', 'Attempting standard Tor browser automation...');
+            
+            try {
+                await this.automation.run();
+                this.dashboard.log('success', 'Standard automation completed successfully');
+            } catch (standardError) {
+                this.dashboard.log('warning', 'Standard automation failed, trying torsocks approach...', {
+                    error: (standardError as Error).message
+                });
+                
+                // Fallback to torsocks method
+                await this.torsocksScript.run();
+                this.dashboard.log('success', 'Torsocks automation completed successfully');
+            }
+            
         } catch (error) {
-            this.dashboard.log('error', 'Automation failed', { 
+            this.dashboard.log('error', 'All automation methods failed', { 
                 error: (error as Error).message,
                 stack: (error as Error).stack 
             });

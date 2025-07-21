@@ -1,4 +1,5 @@
 import { TorBrowser } from './tor-browser';
+import { TorsocksBrowser } from './torsocks-browser';
 import { ScreenshotCapture } from './screenshot';
 import { WebhookSender } from './webhook';
 import { config } from './config';

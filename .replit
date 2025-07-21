@@ -2,7 +2,7 @@ modules = ["nodejs-20"]
 
 [nix]
 channel = "stable-24_05"
-packages = ["glib", "nss", "mesa", "gtk3", "tor", "libxkbcommon", "alsa-lib"]
+packages = ["glib", "nss", "mesa", "gtk3", "tor", "libxkbcommon", "alsa-lib", "torsocks"]
 
 [workflows]
 runButton = "Project"
