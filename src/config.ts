@@ -51,8 +51,12 @@ export const config = {
             '--ignore-certificate-errors-spki-list',
             '--disable-site-isolation-trials',
             '--disable-blink-features=AutomationControlled',
+            '--disable-web-security',
+            '--disable-features=VizDisplayCompositor,VizService',
+            '--disable-ipc-flooding-protection',
             '--proxy-server=socks5://127.0.0.1:9050',
-            '--host-resolver-rules="MAP * ~NOTFOUND , EXCLUDE 127.0.0.1"'
+            '--proxy-bypass-list=<-loopback>',
+            '--host-resolver-rules=MAP * ~NOTFOUND , EXCLUDE localhost'
         ]
     },
     

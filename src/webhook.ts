@@ -1,8 +1,14 @@
 import axios, { AxiosResponse } from 'axios';
 import FormData from 'form-data';
 import { config } from './config';
+import { Dashboard } from './dashboard';
 
 export class WebhookSender {
+    private dashboard: Dashboard;
+
+    constructor(dashboard: Dashboard) {
+        this.dashboard = dashboard;
+    }
     async sendImage(imageBuffer: Buffer): Promise<void> {
         try {
             console.log('📤 Preparing image for webhook delivery...');

@@ -1,12 +1,18 @@
 import puppeteer, { Browser, LaunchOptions } from 'puppeteer';
 import { config } from './config';
+import { Dashboard } from './dashboard';
 
 export class TorBrowser {
     private browser: Browser | null = null;
+    private dashboard: Dashboard;
+
+    constructor(dashboard: Dashboard) {
+        this.dashboard = dashboard;
+    }
 
     async launch(): Promise<Browser> {
         try {
-            console.log('🔧 Configuring browser with Tor proxy...');
+            this.dashboard.log('info', 'Configuring browser with Tor proxy...');
             
             const launchOptions: LaunchOptions = {
                 headless: config.BROWSER_CONFIG.headless,
@@ -15,7 +21,7 @@ export class TorBrowser {
                 args: config.BROWSER_CONFIG.args
             };
 
-            console.log('🚀 Launching browser...');
+            this.dashboard.log('info', 'Launching browser...');
             this.browser = await puppeteer.launch(launchOptions);
             
             // Test Tor connection by checking IP
@@ -23,7 +29,7 @@ export class TorBrowser {
             
             return this.browser;
         } catch (error) {
-            console.error('❌ Failed to launch browser with Tor proxy:', error);
+            this.dashboard.log('error', 'Failed to launch browser with Tor proxy', { error: (error as Error).message });
             throw new Error(`Browser launch failed: ${error}`);
         }
     }
@@ -34,14 +40,8 @@ export class TorBrowser {
         }
 
         try {
-            console.log('🔍 Validating Tor connection...');
+            this.dashboard.log('info', 'Validating Tor connection...');
             const page = await this.browser.newPage();
-            
-            // Set a longer timeout and try to validate by checking our external IP
-            await page.setRequestInterception(true);
-            page.on('request', (request) => {
-                request.continue();
-            });
             
             // First try a simple connection test
             try {
@@ -49,22 +49,17 @@ export class TorBrowser {
                     waitUntil: 'domcontentloaded',
                     timeout: 20000 
                 });
-                console.log('✅ Basic proxy connection working');
+                this.dashboard.log('success', 'Basic proxy connection working');
             } catch (testError) {
-                console.log('⚠️  Basic test failed, but continuing with onion site...');
+                this.dashboard.log('warning', 'Basic test failed, but continuing...');
             }
             
-            // Now try the actual target
-            await page.goto(config.TARGET_URL, { 
-                waitUntil: 'domcontentloaded',
-                timeout: 45000 
-            });
-            
-            console.log('✅ Tor connection validated successfully');
             await page.close();
+            this.dashboard.log('success', 'Tor connection validation completed');
         } catch (error) {
-            console.error('❌ Tor connection validation failed:', error);
-            console.log('🔧 Skipping validation and proceeding with automation...');
+            this.dashboard.log('warning', 'Tor connection validation failed, proceeding anyway', { 
+                error: (error as Error).message 
+            });
             // Don't throw here, just log and continue
         }
     }

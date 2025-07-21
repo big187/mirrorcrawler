@@ -1,7 +1,13 @@
 import sharp from 'sharp';
 import { BoundingBox } from 'puppeteer';
+import { Dashboard } from './dashboard';
 
 export class ScreenshotCapture {
+    private dashboard: Dashboard;
+
+    constructor(dashboard: Dashboard) {
+        this.dashboard = dashboard;
+    }
     async cropImage(imageBuffer: Buffer, boundingBox: BoundingBox): Promise<Buffer> {
         try {
             console.log('✂️  Cropping image to target bounds...');

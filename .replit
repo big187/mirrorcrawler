@@ -24,6 +24,10 @@ args = "tor_automation_test"
 task = "workflow.run"
 args = "Tor Service"
 
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "Dashboard"
+
 [[workflows.workflow]]
 name = "Install Dependencies"
 author = "agent"
@@ -47,3 +51,16 @@ author = "agent"
 [[workflows.workflow.tasks]]
 task = "shell.exec"
 args = "tor --RunAsDaemon 0 --SocksPort 9050"
+
+[[workflows.workflow]]
+name = "Dashboard"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "npx ts-node src/app.ts"
+waitForPort = 5000
+
+[[ports]]
+localPort = 5000
+externalPort = 80
