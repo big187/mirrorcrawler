@@ -63,8 +63,17 @@ export class Dashboard {
                 status: 'running',
                 last_execution: this.logs.length > 0 ? this.logs[this.logs.length - 1].timestamp : null,
                 total_executions: this.screenshots.length,
-                success_rate: this.calculateSuccessRate()
+                success_rate: this.calculateSuccessRate(),
+                tor_ports: [9050, 9051],
+                target_url: 'http://h3h66vqwmmxxheeuwi4hhk52ic5svhnb73xdnxnzaj6vrnk742ntnhyd.onion/'
             });
+        });
+
+        // Manual trigger endpoint
+        this.app.post('/api/trigger', (req, res) => {
+            this.log('info', 'Manual automation trigger requested via dashboard');
+            // Trigger will be handled by the app logic
+            res.json({ message: 'Automation trigger requested' });
         });
 
         // Screenshot viewing

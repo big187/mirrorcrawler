@@ -49,9 +49,15 @@ export class TorBrowser {
                     waitUntil: 'domcontentloaded',
                     timeout: 20000 
                 });
-                this.dashboard.log('success', 'Basic proxy connection working');
+                const content = await page.content();
+                this.dashboard.log('success', 'Basic proxy connection working', { 
+                    port: 9051,
+                    response_preview: content.substring(0, 200)
+                });
             } catch (testError) {
-                this.dashboard.log('warning', 'Basic test failed, but continuing...');
+                this.dashboard.log('warning', 'Basic test failed, but continuing...', { 
+                    error: (testError as Error).message 
+                });
             }
             
             await page.close();

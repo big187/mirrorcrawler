@@ -22,11 +22,11 @@ args = "tor_automation_test"
 
 [[workflows.workflow.tasks]]
 task = "workflow.run"
-args = "Tor Service"
+args = "Dashboard"
 
 [[workflows.workflow.tasks]]
 task = "workflow.run"
-args = "Dashboard"
+args = "Tor Service"
 
 [[workflows.workflow]]
 name = "Install Dependencies"
@@ -45,14 +45,6 @@ task = "shell.exec"
 args = "npm install puppeteer sharp axios form-data dotenv @types/node typescript ts-node && npx ts-node src/main.ts"
 
 [[workflows.workflow]]
-name = "Tor Service"
-author = "agent"
-
-[[workflows.workflow.tasks]]
-task = "shell.exec"
-args = "tor --RunAsDaemon 0 --SocksPort 9050"
-
-[[workflows.workflow]]
 name = "Dashboard"
 author = "agent"
 
@@ -60,6 +52,14 @@ author = "agent"
 task = "shell.exec"
 args = "npx ts-node src/app.ts"
 waitForPort = 5000
+
+[[workflows.workflow]]
+name = "Tor Service"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "tor --RunAsDaemon 0 --SocksPort 9050 --SocksPort 9051"
 
 [[ports]]
 localPort = 5000

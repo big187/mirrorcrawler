@@ -10,7 +10,7 @@ export const config = {
     // Tor proxy configuration
     TOR_PROXY: {
         host: '127.0.0.1',
-        port: 9050,
+        port: 9051,
         type: 'socks5' as const
     },
     
@@ -54,7 +54,7 @@ export const config = {
             '--disable-web-security',
             '--disable-features=VizDisplayCompositor,VizService',
             '--disable-ipc-flooding-protection',
-            '--proxy-server=socks5://127.0.0.1:9050',
+            '--proxy-server=socks5://127.0.0.1:9051',
             '--proxy-bypass-list=<-loopback>',
             '--host-resolver-rules=MAP * ~NOTFOUND , EXCLUDE localhost'
         ]
